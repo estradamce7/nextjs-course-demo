@@ -39,11 +39,14 @@ export async function getStaticPaths() {
 
   // returns an obj where we describe all the dynamic segment values. in this case, all meetupIds
   return {
-    fallback: false, // this key tells nextjs whether paths array contains all supported parameter values or only some; false - paths contains all supported meetupId values, true - nextjs will try to generate a page for this meetupId dynamically
+    fallback: 'blocking', // this key tells nextjs whether paths array contains all supported parameter values or only some; false - paths contains all supported meetupId values, true - nextjs will try to generate a page for this meetupId dynamically
     paths: meetups.map((meetup) => ({
       params: { meetupId: meetup._id.toString() },
     })),
   };
+  // when fallback is set to true or 'blocking' we are telling NextJS that the paths specified here might not be exhausted, NextJS will not respond with 404 but will generate the page on-demand and cache it.
+  // true - will return an empty page and pull down dynamically generate page once done
+  // 'blocking' user will not see anything until the page was pre-generated and the finished page will be served
 }
 
 // we cannot use React hooks here
